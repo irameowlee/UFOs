@@ -19,36 +19,22 @@ function buildTable(data) {
     });
 }
 
-// create an empty filters variable to keep track of all the elements that change when a search is entered
-var filters = {};
-
-//write code for two functions whose names we’ve provided in the starter code, updateFilters() and filterTable()
-//1. update filter that will replace handle click
-function updateFilters() {
-    let element = d3.select(this);
-    let elementValue = element.property("value");
-    let elementId = element.attr("id");
-    if (elementValue) {
-        filters[elementId] = elementValue;
-      }
-      else {
-        delete filters[elementId];
-      }
-    console.log(filters);
-    filterTable();
-  
-}
-//2. filter table 
-function filterTable() {
+function handleClick() {
+    // Create a date variable from value from the filter
+    let date = d3.select("#datetime").property("value");
     let filteredData = tableData;
-    Object.entries(filters).forEach(([key,value]) => {
-        filteredData = filteredData.filter(row => row[key] === value);
-      });
+
+    // If statement in case a date is selected
+    if (date) {
+        filteredData = filteredData.filter(row => row.datetime === date);
+    }
+
+    // Rebuild the table using the filtered data
     buildTable(filteredData);
 }
 
 // Use D3 to listen for a click event
 d3.selectAll("#filter-btn").on("click", handleClick);
-
+    
 // Build original table when the page loads
 buildTable(tableData);
